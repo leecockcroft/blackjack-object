@@ -5,11 +5,17 @@
     this.el = document.getElementById(el);
     this.deck_info = document.createElement('div')
     this.deck_info.id = 'full_deck';
+    this.deal = document.createElement('BUTTON');
+    this.deal.textContent = 'deal';
     this.button = document.createElement('BUTTON');
     this.button.textContent = 'Hit'
     this.stand = document.createElement('BUTTON');
-    this.stand.textContent = 'Stand'
-    this.dealCards = []
+    this.stand.textContent = 'Stand';
+    this.reset = document.createElement('BUTTON');
+    this.reset.textContent = 'reset';
+
+
+    this.dealCards = [];
     this.player = {
       score: 0
     }
@@ -29,15 +35,18 @@
 
     this.deck_info.appendChild(this.player_div)
     this.deck_info.appendChild(this.dealer_div)
+    this.deck_info.appendChild(this.deal)
     this.deck_info.appendChild(this.button)
     this.deck_info.appendChild(this.stand)
+    this.deck_info.appendChild(this.reset)
     this.el.appendChild(this.deck_info)
 
 
     let x = this.fullDeck.deal.bind(this)
     console.log(x())
-    console.log(this.player.score,'player')
-    console.log(this.dealer.score,'dealer')
+
+    console.log(this.player.score, 'player')
+    console.log(this.dealer.score, 'dealer')
     this.button.onclick = this.fullDeck.hit.bind(this)
     this.stand.onclick = this.fullDeck.stand.bind(this)
 
@@ -61,40 +70,79 @@
   const Deck = function(deck_div) {
     this.fullStack = []
     deck_div.innerHTML = ""
-  let cardNumbers = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+    let cardNumbers = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
     let cardSuits = ['hearts', 'clubs', 'spades', 'diam']
     let parentFrag = document.createDocumentFragment();
     //loop the suits, the amount of times per cardNumber
     //loops hearts 52 times
+
+
+
+
+
     for (var i = 0; i < cardSuits.length; i++) {
       for (var j = 0; j < cardNumbers.length; j++) {
-        let deck = new Card();
 
-        deck.id = 'card-' + cardNumbers[j];
-        deck.value = cardNumbers[j];
-        deck.suit = cardSuits[i]
-        deck.color = 'black'
+           this.fullStack.push({
+            id : 'card-' + cardNumbers[j],
+            value : cardNumbers[j],
+            suit : cardSuits[i],
+            color : 'black',
+            weight:parseInt(cardNumbers[j])
+          })
 
-        if (deck.suit.charAt(0) === 'h' || deck.suit.charAt(0) === 'd') {
-          deck.color = 'red'
-        }
 
-        deck.test = deck_div
-        deck.weight = parseInt(cardNumbers[j])
-        if (cardNumbers[j] === 'J' || cardNumbers[j] === 'Q' || cardNumbers[j] === 'K') {
-
-          deck.weight = 10;
-        }
-        if (cardNumbers[j] === 'A') {
-          deck.weight = 11;
-        }
-        this.fullStack.push(deck)
       }
 
-      shuffle(this.fullStack)
-      deck_div.appendChild(parentFrag)
-      this.stack(deck_div)
+
+
+
+
+
     }
+
+    shuffle(this.fullStack)
+    let deck = new Card();
+    for(var i =0;i<this.fullStack.length;i++){
+
+
+
+
+    deck.id = 'card-' + this.fullStack[i].id
+    deck.value = this.fullStack[i].value
+    deck.suit = this.fullStack[i].suit
+    deck.color = 'black'
+    deck.weight=this.fullStack[i].weight
+    if(deck.suit.charAt(0)=='h' ||deck.suit.charAt(0)=='d'){
+        deck.color='red'
+
+}
+    if(deck.value==='J' ||deck.value==='Q' ||deck.value==='K' ){
+
+    this.fullStack[i].weight=10
+    }
+    if(deck.value=='A'){
+        this.fullStack[i].weight=11
+      }
+
+  deck.all(deck_div)
+      this.stack(deck_div)
+      console.log(this.fullStack)
+      console.log(deck_div,'deck')
+        deck_div.appendChild(parentFrag)
+}
+
+
+
+
+
+
+
+
+
+
+
+
   }
   Deck.prototype.deal = function() {
 
@@ -105,34 +153,36 @@
     let card4 = this.fullDeck.fullStack.pop()
     this.player.score = parseInt(card1.weight) + parseInt(card3.weight);
     this.dealer.score = parseInt(card2.weight) + parseInt(card4.weight);
-    console.log(this.fullDeck.fullStack, 'test');
+
 
   }
 
   Deck.prototype.stack = function(deck_div) {
     let cards = deck_div.children;
+
     for (var i = cards.length - 1; i >= 0; i--) {
       cards[i].style.top = i + 'px';
       cards[i].style.left = i + 'px';
       cards[i].classList.add('stacked_card');
     }
   }
-//cards
-const Card = function(id, value, suit, test, color) {
+  //cards
+  const Card = function(id, value, suit, color,display) {
 
     this.id = id;
     this.value = value;
     this.suit = suit;
-    this.test = test
+
     this.weight = 0;
-    this.allCards = [];
-    this.color = color
+    this.color = color;
+    this.display=display
 
-    let cardContainer = document.createElement('div');
-    cardContainer.classList.add('card_container');
-    cardContainer.id = this.id;
 
-    this.all = function(fragment) {
+
+    this.all = function(parentFrag) {
+      let cardContainer = document.createElement('div');
+      cardContainer.classList.add('card_container');
+      cardContainer.id = this.id;
       let frontFace = document.createElement('div')
       let flip = document.createElement('div')
       flip.classList.add('flip')
@@ -152,26 +202,37 @@ const Card = function(id, value, suit, test, color) {
       backFace.classList.add('back');
       backFace.innerHTML = 'TESTING';
 
-      frontFace.appendChild(suitDisplay)
-      frontFace.appendChild(numberDisplay)
+      backFace.appendChild(suitDisplay)
+      backFace.appendChild(numberDisplay)
 
       flip.appendChild(frontFace)
       flip.appendChild(backFace)
       cardContainer.appendChild(flip)
 
-      this.test.appendChild(cardContainer)
-      cardContainer.onclick = function(e) {
-        e.currentTarget.classList.toggle('flip_card')
-        e.currentTarget.classList.toggle('slide_over')
-      }
+
+      cardContainer.onclick = cardClick
+
+      parentFrag.appendChild(cardContainer)
+
     }
+
   }
+  var cardClick=(function(){
+    var counter=0;
+    return function cardClick(e) {
+      e.currentTarget.classList.toggle('flip_card')
+      e.currentTarget.classList.toggle('slide_over')
+      e.currentTarget.style.zIndex=counter;
+      counter++}
+
+})()
 
   Deck.prototype.hit = function() {
     let card = this.fullDeck.fullStack.pop()
     this.player.score += card.weight
+    console.log(this.player.score)
     if (this.player.score > 21) {
-      console.log('bust')
+      console.log('bust' + this.player.score)
     }
     if (this.player.score === 21) {
       console.log(21)
@@ -179,14 +240,37 @@ const Card = function(id, value, suit, test, color) {
 
   }
 
-  Deck.prototype.stand=function(){
+  Deck.prototype.stand = function() {
 
-    while(this.dealer.score < 17){
+    while (this.dealer.score < 17) {
       let card = this.fullDeck.fullStack.pop();
-      this.dealer.score+=card.weight;
+      this.dealer.score += card.weight;
       console.log(this.dealer.score)
+    }
+    if (this.dealer.score >= 17 && this.dealer.score <= 21) {
 
-}
+      compare(this.dealer.score, this.player.score)
+
+    }
+    if (this.dealer.score > 21) {
+      console.log('dealer bust')
+    }
+
+  }
+
+  function compare(a, b) {
+    if (a > b) {
+      console.log('dealer wins')
+    }
+    if (b > a) {
+      console.log('player wins')
+
+    }
+    if (a == b) {
+
+      console.log('push')
+    }
+
 
   }
 

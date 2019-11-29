@@ -4,7 +4,8 @@
   width:200px;
   position:absolute;
     transform-style:preserve-3d;
-    transition:2s;
+    transition:0.1s;
+    background:yellow;
 
 
 }
@@ -17,27 +18,31 @@
   font-size:30px
 }
 
-.back{
-  transform:rotatey(180deg);
-    backface-visibility:hidden;
-
-}
-.front{
-    backface-visibility:hidden;
-}
-
-.slide_over{
-  transform:translate(180px)
-}
 .flip_card .flip{
+transform:rotateY(180deg);
+transform-origin:center;
+width:222px;
+height:300px;
 
 
 }
 
-.flip_card.front{
-    transform:rotatey(180deg);
-        backface-visibility:hidden
+.flip{
+  transition:0.2s;
+  transform-style:preserve-3d;
 }
+
+.card_container.slide_over{
+transform:translate(250px);
+
+
+}
+
+.back{
+  transform:rotateY(180deg);
+  backface-visibility: hidden;
+}
+
 
 
 .red{
