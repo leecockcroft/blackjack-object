@@ -147,12 +147,12 @@
     let playerCard3 = this.fullDeck.fullStack.pop()
     let playerCard4 = this.fullDeck.fullStack.pop()
     this.dealer_div.appendChild(cardDisplay2)
-      cardDisplay4.classList.add('dealer','test')
-      this.dealer_div.appendChild(cardDisplay4)
+    cardDisplay4.classList.add('dealer', 'test')
+    this.dealer_div.appendChild(cardDisplay4)
 
     this.player.score = parseInt(playerCard1.weight) + parseInt(playerCard3.weight)
     this.dealer.score = parseInt(playerCard2.weight) + parseInt(playerCard4.weight)
-    console.log(this.player.score,'player',this.dealer.score,'dealer')
+
 
 
     //
@@ -256,17 +256,34 @@
   })()
 
   Deck.prototype.hit = function() {
+    let x = document.querySelectorAll('.card_container');
+    let hit;
+    for (var i = 0; i < x.length; i++) {
+      hit = x[51]
+    }
     let card = this.fullDeck.fullStack.pop()
+    this.player_div.appendChild(hit)
+    let count = 200
+    count += 50
+    hit.style.left = count + "px";
+
     this.player.score += card.weight
-    console.log(this.player.score)
-    if (this.player.score > 21) {
-      console.log('bust' + this.player.score)
-    }
-    if (this.player.score === 21) {
-      console.log(21)
 
 
-    }
+
+
+
+    // let card = this.fullDeck.fullStack.pop()
+    // this.player.score += card.weight
+    // console.log(this.player.score)
+    // if (this.player.score > 21) {
+    //   console.log('bust' + this.player.score)
+    // }
+    // if (this.player.score === 21) {
+    //   console.log(21)
+    //
+    //
+    // }
 
   }
 
