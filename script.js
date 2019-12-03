@@ -26,15 +26,19 @@
     }
 
 //player div
-    this.player_div = document.createElement('div')
-    this.player_div.id = 'player'
-    this.playerScoreDiv=document.createElement('div')
+    this.player_div = document.createElement('div');
+    this.player_div.id = 'player';
+    this.playerScoreDiv=document.createElement('div');
 
 
 
-    this.dealer_div = document.createElement('div')
-    this.dealer_div.id = 'dealer'
-    
+    this.dealer_div = document.createElement('div');
+    this.dealer_div.id = 'dealer';
+    this.dealer_score_div=document.createElement('div');
+    this.showDealerScore=document.createElement('p');
+
+
+
     this.fullDeck = new Deck(this.deck_info)
     this.el.appendChild(this.player_div)
     this.el.appendChild(this.dealer_div)
@@ -43,7 +47,6 @@
     this.deck_info.appendChild(this.stand)
     this.deck_info.appendChild(this.reset)
     this.el.appendChild(this.deck_info)
-
 
     let x = this.fullDeck.deal.bind(this)
     let resetGame =this.fullDeck.reset.bind(this)
@@ -185,7 +188,9 @@ playerScoreDiv.textContent='player score is '+ playerScore;
     this.player.score = parseInt(playerCard1.weight) + parseInt(playerCard3.weight)
     this.dealer.score = parseInt(playerCard2.weight) + parseInt(playerCard4.weight)
       this.playerScoreDiv=document.createElement('p')
-
+      this.showDealerScore.textContent='dealer score is';
+      this.dealer_score_div.appendChild(this.showDealerScore);
+      this.dealer_div.appendChild(this.dealer_score_div)
       upDateScore(this.playerScoreDiv,this.player_div,this.player.score)
   }
 
@@ -276,14 +281,43 @@ playerScoreDiv.textContent='player score is '+ playerScore;
     upDateScore(this.playerScoreDiv,this.player_div,this.player.score)
 
     if(this.player.score >21){
-this.playerScoreDiv.textContent='BUST '+this.player.score + ' Dealer wins'
+      this.playerScoreDiv.textContent='BUST '+this.player.score + ' Dealer wins'
+
+
 
     }
+    if(this.player.score==21){
+        compare(this.player.score,this.dealer.score)
+    }
+
+
   }
 
   Deck.prototype.stand = function() {
 
+    let x = document.querySelector('.dealer')
+      x.classList.remove("dealer");
+
+      // if(this.dealer.score >16 && this.dealer.score < 21){
+      //     console.log(this.dealer.score)
+      //
+      // return   compare(this.player.score,this.dealer.score)
+      // }
+
+
     while (this.dealer.score < 17) {
+      let cards = document.querySelectorAll('.card_container')
+      let full;
+      for(var i=0;i<cards.length;i++){
+          full=cards[51]
+
+
+      }
+      let count=200
+      full.style.left=count+'px'
+
+      this.dealer_div.appendChild(full)
+      console.log(full,this.dealer_div)
       let card = this.fullDeck.fullStack.pop();
       this.dealer.score += card.weight;
       console.log(this.dealer.score)
@@ -296,20 +330,22 @@ this.playerScoreDiv.textContent='BUST '+this.player.score + ' Dealer wins'
     if (this.dealer.score > 21) {
       console.log('dealer bust')
     }
-
+this.showDealerScore.textContent='dealer score is '+this.dealer.score
   }
 
   function compare(a, b) {
+    let showResults=document.getElementById('results')
+    showResults.innerHTML=""
     if (a > b) {
-      console.log('dealer wins')
+      showResults.innerHTML=('dealer wins')
     }
     if (b > a) {
-      console.log('player wins')
+      showResults.innerHTML='player wins'
 
     }
     if (a == b) {
 
-      console.log('push')
+      showResults.innerHTML='push'
     }
 
 

@@ -5,7 +5,7 @@
   left:500px
 }
 .dealer{
-  /* background:#000 !important; */
+ background:#000 !important;
 }
 
 .card_container{
@@ -44,6 +44,12 @@
 
 }
 
+#results{
+  position: relative;
+    /* bottom: 457.2px; */
+    left: 400px;
+    bottom: -400px;
+}
 
 .card_container.slide_over{
 transform:translate(250px);
