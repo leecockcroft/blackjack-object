@@ -2,6 +2,8 @@
 (function() {
 
   const Game = function(el) {
+
+    //game cta
     this.el = document.getElementById(el);
     this.deck_info = document.createElement('div')
     this.deck_info.id = 'full_deck';
@@ -23,16 +25,17 @@
       score: 0
     }
 
+//player div
     this.player_div = document.createElement('div')
     this.player_div.id = 'player'
+    this.playerScoreDiv=document.createElement('div')
+
+
 
     this.dealer_div = document.createElement('div')
     this.dealer_div.id = 'dealer'
-
-
+    
     this.fullDeck = new Deck(this.deck_info)
-
-
     this.el.appendChild(this.player_div)
     this.el.appendChild(this.dealer_div)
     this.deck_info.appendChild(this.deal)
@@ -43,7 +46,9 @@
 
 
     let x = this.fullDeck.deal.bind(this)
-    console.log(x(), 'x')
+    let resetGame =this.fullDeck.reset.bind(this)
+    this.deal.onclick=x
+    this.reset.onclick=resetGame
 
 
 
@@ -123,6 +128,33 @@
 
 
   }
+
+
+Deck.prototype.reset = function() {
+  let button=document.createElement('BUTTON')
+  button.innerHTML='start'
+  this.el.innerHTML=""
+  this.el.appendChild(button)
+  button.onclick=function(){
+    const x = new Game('test')
+
+  }
+
+
+
+
+
+
+}
+let upDateScore=function(playerScoreDiv,player_div,playerScore){
+
+playerScoreDiv.textContent='player score is '+ playerScore;
+
+  player_div.appendChild(playerScoreDiv)
+
+
+}
+
   Deck.prototype.deal = function() {
 
 
@@ -152,36 +184,9 @@
 
     this.player.score = parseInt(playerCard1.weight) + parseInt(playerCard3.weight)
     this.dealer.score = parseInt(playerCard2.weight) + parseInt(playerCard4.weight)
+      this.playerScoreDiv=document.createElement('p')
 
-
-
-    //
-    // cardDisplay1.classList.toggle('flip_card')
-    // cardDisplay1.classList.toggle('slide_over')
-    // cardDisplay3.classList.add('test')
-    //   cardDisplay3.classList.toggle('flip_card')
-    //   cardDisplay3.classList.toggle('slide_over')
-    //
-    // this.player_div.appendChild(cardDisplay1)
-    // this.player_div.appendChild(cardDisplay3)
-    //
-    // cardDisplay2.classList.toggle('flip_card')
-    // cardDisplay2.classList.toggle('slide_over')
-    // cardDisplay4.classList.toggle('flip_card')
-    // cardDisplay4.classList.toggle('slide_over')
-    // cardDisplay4.classList.add('test')
-    // this.dealer_div.appendChild(cardDisplay2)
-    //   this.dealer_div.appendChild(cardDisplay4)
-
-
-    //   let card2 = this.fullDeck.fullStack.pop()
-    // let card3 = this.fullDeck.fullStack.pop()
-    // let card4 = this.fullDeck.fullStack.pop()
-    // this.player.score = parseInt(card1.weight) + parseInt(card3.weight);
-    // this.dealer.score = parseInt(card2.weight) + parseInt(card4.weight);
-    // console.log(card1,card2,card3,card4)
-
-
+      upDateScore(this.playerScoreDiv,this.player_div,this.player.score)
   }
 
   Deck.prototype.stack = function(deck_div) {
@@ -263,28 +268,17 @@
     }
     let card = this.fullDeck.fullStack.pop()
     this.player_div.appendChild(hit)
-    let count = 200
-    count += 50
-    hit.style.left = count + "px";
 
+    let count = 200
+    hit.style.left = count + "px";
     this.player.score += card.weight
 
+    upDateScore(this.playerScoreDiv,this.player_div,this.player.score)
 
+    if(this.player.score >21){
+this.playerScoreDiv.textContent='BUST '+this.player.score + ' Dealer wins'
 
-
-
-    // let card = this.fullDeck.fullStack.pop()
-    // this.player.score += card.weight
-    // console.log(this.player.score)
-    // if (this.player.score > 21) {
-    //   console.log('bust' + this.player.score)
-    // }
-    // if (this.player.score === 21) {
-    //   console.log(21)
-    //
-    //
-    // }
-
+    }
   }
 
   Deck.prototype.stand = function() {
