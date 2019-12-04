@@ -25,17 +25,17 @@
       score: 0
     }
 
-//player div
+    //player div
     this.player_div = document.createElement('div');
     this.player_div.id = 'player';
-    this.playerScoreDiv=document.createElement('div');
+    this.playerScoreDiv = document.createElement('div');
 
 
 
     this.dealer_div = document.createElement('div');
     this.dealer_div.id = 'dealer';
-    this.dealer_score_div=document.createElement('div');
-    this.showDealerScore=document.createElement('p');
+    this.dealer_score_div = document.createElement('div');
+    this.showDealerScore = document.createElement('p');
 
 
 
@@ -49,15 +49,11 @@
     this.el.appendChild(this.deck_info)
 
     let x = this.fullDeck.deal.bind(this)
-    let resetGame =this.fullDeck.reset.bind(this)
-    this.deal.onclick=x
-    this.reset.onclick=resetGame
-
-
-
+    let resetGame = this.fullDeck.reset.bind(this)
+    this.deal.onclick = x
+    this.reset.onclick = resetGame
     this.button.onclick = this.fullDeck.hit.bind(this)
     this.stand.onclick = this.fullDeck.stand.bind(this)
-
   }
 
   let shuffle = (deck) => {
@@ -83,10 +79,6 @@
     let parentFrag = document.createDocumentFragment();
     //loop the suits, the amount of times per cardNumber
     //loops hearts 52 times
-
-
-
-
 
     for (var i = 0; i < cardSuits.length; i++) {
       for (var j = 0; j < cardNumbers.length; j++) {
@@ -129,34 +121,30 @@
       deck_div.appendChild(parentFrag)
     }
 
-
   }
 
+  Deck.prototype.reset = function() {
+    let showResults = document.getElementById('results')
+    showResults.innerHTML = ""
+    let button = document.createElement('BUTTON')
+    button.innerHTML = 'start'
+    this.el.innerHTML = ""
+    this.playerScoreDiv =
+      this.el.appendChild(button)
+    button.onclick = function() {
+      const x = new Game('test')
 
-Deck.prototype.reset = function() {
-  let button=document.createElement('BUTTON')
-  button.innerHTML='start'
-  this.el.innerHTML=""
-  this.el.appendChild(button)
-  button.onclick=function(){
-    const x = new Game('test')
+    }
 
   }
+  let upDateScore = function(playerScoreDiv, player_div, playerScore) {
+
+    playerScoreDiv.textContent = 'player score is ' + playerScore;
+
+    player_div.appendChild(playerScoreDiv)
 
 
-
-
-
-
-}
-let upDateScore=function(playerScoreDiv,player_div,playerScore){
-
-playerScoreDiv.textContent='player score is '+ playerScore;
-
-  player_div.appendChild(playerScoreDiv)
-
-
-}
+  }
 
   Deck.prototype.deal = function() {
 
@@ -187,11 +175,16 @@ playerScoreDiv.textContent='player score is '+ playerScore;
 
     this.player.score = parseInt(playerCard1.weight) + parseInt(playerCard3.weight)
     this.dealer.score = parseInt(playerCard2.weight) + parseInt(playerCard4.weight)
-      this.playerScoreDiv=document.createElement('p')
-      this.showDealerScore.textContent='dealer score is';
-      this.dealer_score_div.appendChild(this.showDealerScore);
-      this.dealer_div.appendChild(this.dealer_score_div)
-      upDateScore(this.playerScoreDiv,this.player_div,this.player.score)
+    this.playerScoreDiv = document.createElement('p')
+    this.showDealerScore.textContent = 'dealer score is';
+    this.dealer_score_div.appendChild(this.showDealerScore);
+    this.dealer_div.appendChild(this.dealer_score_div)
+    upDateScore(this.playerScoreDiv, this.player_div, this.player.score)
+    if (this.player.score == 21) {
+
+      let showResults = document.getElementById('results')
+      showResults.innerHTML = "BLACKJACK"
+    }
   }
 
   Deck.prototype.stack = function(deck_div) {
@@ -278,17 +271,15 @@ playerScoreDiv.textContent='player score is '+ playerScore;
     hit.style.left = count + "px";
     this.player.score += card.weight
 
-    upDateScore(this.playerScoreDiv,this.player_div,this.player.score)
+    upDateScore(this.playerScoreDiv, this.player_div, this.player.score)
 
-    if(this.player.score >21){
-      this.playerScoreDiv.textContent='BUST '+this.player.score + ' Dealer wins'
+    if (this.player.score > 21) {
 
-
-
+      let showResults = document.getElementById('results')
+      showResults.innerHTML = "BUST " + this.player.score
     }
-    if(this.player.score==21){
-        compare(this.player.score,this.dealer.score)
-    }
+
+
 
 
   }
@@ -296,28 +287,28 @@ playerScoreDiv.textContent='player score is '+ playerScore;
   Deck.prototype.stand = function() {
 
     let x = document.querySelector('.dealer')
-      x.classList.remove("dealer");
+    x.classList.remove("dealer");
 
-      // if(this.dealer.score >16 && this.dealer.score < 21){
-      //     console.log(this.dealer.score)
-      //
-      // return   compare(this.player.score,this.dealer.score)
-      // }
+    // if(this.dealer.score >16 && this.dealer.score < 21){
+    //     console.log(this.dealer.score)
+    //
+    // return   compare(this.player.score,this.dealer.score)
+    // }
 
 
     while (this.dealer.score < 17) {
       let cards = document.querySelectorAll('.card_container')
       let full;
-      for(var i=0;i<cards.length;i++){
-          full=cards[51]
+      for (var i = 0; i < cards.length; i++) {
+        full = cards[51]
 
 
       }
-      let count=200
-      full.style.left=count+'px'
+      let count = 200
+      full.style.left = count + 'px'
 
       this.dealer_div.appendChild(full)
-      console.log(full,this.dealer_div)
+      console.log(full, this.dealer_div)
       let card = this.fullDeck.fullStack.pop();
       this.dealer.score += card.weight;
       console.log(this.dealer.score)
@@ -328,25 +319,28 @@ playerScoreDiv.textContent='player score is '+ playerScore;
 
     }
     if (this.dealer.score > 21) {
-      console.log('dealer bust')
+      let showResults = document.getElementById('results')
+      showResults.innerHTML = "dealer bust"
     }
-this.showDealerScore.textContent='dealer score is '+this.dealer.score
+
+    this.showDealerScore.textContent = 'dealer score is ' + this.dealer.score
   }
 
   function compare(a, b) {
-    let showResults=document.getElementById('results')
-    showResults.innerHTML=""
+    let showResults = document.getElementById('results')
+    showResults.innerHTML = ""
     if (a > b) {
-      showResults.innerHTML=('dealer wins')
+      showResults.innerHTML = 'dealer wins'
     }
     if (b > a) {
-      showResults.innerHTML='player wins'
+      showResults.innerHTML = 'player wins'
 
     }
     if (a == b) {
 
-      showResults.innerHTML='push'
+      showResults.innerHTML = 'push'
     }
+
 
 
   }
